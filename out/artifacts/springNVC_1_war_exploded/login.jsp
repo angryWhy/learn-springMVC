@@ -17,5 +17,10 @@
     p:<input name="password" type="password"><br/>
     <input type="submit" value="登录">
 </form>
+<h1>
+    search演示
+</h1>
+<a href="user/find?book_id=100">查询书籍</a>
+<a href="user/reg/jack/001">参数</a>
 </body>
 </html>

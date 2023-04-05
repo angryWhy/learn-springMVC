@@ -22,5 +22,13 @@
 </h1>
 <a href="user/find?book_id=100">查询书籍</a>
 <a href="user/reg/jack/001">参数</a>
+<a href="vote/vote1?name=wzx">获取参数</a>
+<form action="vote/vote2">
+    号码:<input name="id" type="text"> <br/>
+    名字:<input name="name" type="password"><br/>
+    宠物号码:<input name="pet.id" type="text"> <br/>
+    宠物名字:<input name="pet.name" type="password"><br/>
+    <input type="submit" value="登录">
+</form>
 </body>
 </html>

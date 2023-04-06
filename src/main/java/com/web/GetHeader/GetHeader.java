@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 @RequestMapping("/vote")
 @Controller
 public class GetHeader {
@@ -19,6 +22,14 @@ public class GetHeader {
     @RequestMapping("/vote2")
     public String test2(Master master){
         System.out.println(master);
+        return"success";
+    }
+    //使用Servletapi获取提交的数据
+    @RequestMapping("/vote4")
+    public String test3(HttpServletRequest request, HttpServletResponse response){
+        String username = request.getParameter("id");
+        String password = request.getParameter("name");
+        System.out.println(username+"-"+password);
         return"success";
     }
 }

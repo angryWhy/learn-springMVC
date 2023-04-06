@@ -9,6 +9,11 @@
 <html>
 <head>
     <title>购买成功</title>
+    主人名字：${requestScope.master.name}
+    主人id：${requestScope.master.id}
+    宠物名字：${requestScope.master.pet.name}
+    宠物id：${requestScope.master.pet.id}
+    地区：${requestScope.address}
 </head>
 <body>
 购买成功

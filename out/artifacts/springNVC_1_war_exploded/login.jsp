@@ -28,7 +28,7 @@
     名字:<input name="name" type="password"><br/>
     宠物号码:<input name="pet.id" type="text"> <br/>
     宠物名字:<input name="pet.name" type="password"><br/>
-    <input type="submit" value="登录">
+    <input type="submit" value="登录vote2">
 </form>
 <h3>serlvet</h3>
 <form action="vote/vote4">

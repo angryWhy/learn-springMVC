@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 @RequestMapping("/vote")
 @Controller
@@ -19,8 +20,15 @@ public class GetHeader {
         System.out.println(username+ae);
         return "success";
     }
+
+    //request域
     @RequestMapping("/vote2")
-    public String test2(Master master){
+    public String test2(Master master,HttpServletRequest request){
+        //request可以放入自己的东西
+        request.setAttribute("address","beijing");
+        //对象是引用类型可以进行修改
+        master.setName("我是新修改的！");
+        //默放进request域的时候，是首字名小写，放进去的
         System.out.println(master);
         return"success";
     }
@@ -30,6 +38,16 @@ public class GetHeader {
         String username = request.getParameter("id");
         String password = request.getParameter("name");
         System.out.println(username+"-"+password);
+        return"success";
+    }
+    @RequestMapping("/vote6")
+    public String test6(Master master, Map<String,Object> map){
+        //springMVC会遍历map，然后放到request域中
+        map.put("address","伤害");
+        //如果这样做的话，就会娶不到，给替换了
+        map.put("master",null);
+        //默放进request域的时候，是首字名小写，放进去的
+        System.out.println(master);
         return"success";
     }
 }

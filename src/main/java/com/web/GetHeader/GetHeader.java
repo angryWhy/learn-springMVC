@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,6 +41,7 @@ public class GetHeader {
         System.out.println(username+"-"+password);
         return"success";
     }
+    //使用Map添加，并且放到域中
     @RequestMapping("/vote6")
     public String test6(Master master, Map<String,Object> map){
         //springMVC会遍历map，然后放到request域中
@@ -49,5 +51,16 @@ public class GetHeader {
         //默放进request域的时候，是首字名小写，放进去的
         System.out.println(master);
         return"success";
+    }
+    //使用ModelAndView添加对象，放到request域中
+    @RequestMapping("/vote7")
+    public ModelAndView test7(Master master) {
+        //创建ModelAndView对象
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("master",master);
+        modelAndView.addObject("address","beijing");
+        //跳转到哪个jsp页面
+        modelAndView.setViewName("success");
+        return modelAndView;
     }
 }

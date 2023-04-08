@@ -12,7 +12,7 @@
     主人名字：${requestScope.master.name}
     主人id：${requestScope.master.id}
     宠物名字：${requestScope.master.pet.name}
-    宠物id：${requestScope.master.pet.id}
+    宠物id：${sessionScope.master.pet.id}
     地区：${requestScope.address}
 </head>
 <body>

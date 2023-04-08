@@ -34,8 +34,16 @@
 <form action="vote/vote4">
     号码:<input name="id" type="text"> <br/>
     名字:<input name="name" type="password"><br/>
-
     <input type="submit" value="登录">
+</form>
+<br/>
+<h3>session域</h3>
+<form action="session/s1">
+    号码:<input name="id" type="text"> <br/>
+    名字:<input name="name" type="password"><br/>
+    宠物号码:<input name="pet.id" type="text"> <br/>
+    宠物名字:<input name="pet.name" type="password"><br/>
+    <input type="submit" value="登录vote2">
 </form>
 </body>
 </html>

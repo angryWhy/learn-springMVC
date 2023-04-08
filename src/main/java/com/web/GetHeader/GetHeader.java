@@ -21,6 +21,17 @@ public class GetHeader {
         System.out.println(username+ae);
         return "success";
     }
+    //使用Servletapi获取提交的数据
+    @RequestMapping("/vote4")
+    public String test3(HttpServletRequest request, HttpServletResponse response){
+        String username = request.getParameter("id");
+        String password = request.getParameter("name");
+        System.out.println(username+"-"+password);
+        return"success";
+    }
+
+
+
 
     //request域
     @RequestMapping("/vote2")
@@ -33,14 +44,7 @@ public class GetHeader {
         System.out.println(master);
         return"success";
     }
-    //使用Servletapi获取提交的数据
-    @RequestMapping("/vote4")
-    public String test3(HttpServletRequest request, HttpServletResponse response){
-        String username = request.getParameter("id");
-        String password = request.getParameter("name");
-        System.out.println(username+"-"+password);
-        return"success";
-    }
+
     //使用Map添加，并且放到域中
     @RequestMapping("/vote6")
     public String test6(Master master, Map<String,Object> map){

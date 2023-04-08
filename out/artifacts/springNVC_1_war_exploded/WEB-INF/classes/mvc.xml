@@ -16,5 +16,9 @@
 <!--        匹配后缀，什么文件-->
         <property name="suffix" value=".jsp"/>
     </bean>
-
+<!--    这是自定义解析视图-->
+    <bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+<!--        order，视图解析器的顺序，值越小，优先级越高-->
+        <property name="order" value="99"/>
+    </bean>
 </beans>

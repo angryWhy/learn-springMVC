@@ -11,13 +11,28 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SpringContext {
+    private String mvcXml;
+    public SpringContext(){}
+    public SpringContext(String mvcXml){
+        this.mvcXml = mvcXml;
+    }
+
+    public String getMvcXml() {
+        return mvcXml;
+    }
+
+    public void setMvcXml(String mvcXml) {
+        this.mvcXml = mvcXml;
+    }
+
     //保存类的全路径
     private List<String> classFullPath = new ArrayList<>();
     //定义属性ioc，存放反射生成的bean对象
     public ConcurrentHashMap<String,Object> ioc = new ConcurrentHashMap<>();
     //要对扫描的包进行解析
     public void init() throws DocumentException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        String basePackage = XmlParser.getBasePackage("springMvc.xml");
+        //这里是写固定的spring配置文件,现在在dispatchServlet里穿进去了
+        String basePackage = XmlParser.getBasePackage(this.mvcXml.split(":")[1]);
 
         //如果有多个包需要扫描，则需要分类
         String[] packages = basePackage.split(",");

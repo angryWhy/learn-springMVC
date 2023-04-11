@@ -6,6 +6,7 @@ import com.MyspringMVC.contetx.SpringContext;
 import com.MyspringMVC.handler.Handler;
 import org.dom4j.DocumentException;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,8 +24,10 @@ public class DispatchServlet extends HttpServlet {
     private List<Handler> handlerList = new ArrayList<>();
     SpringContext springContext;
     @Override
-    public void init() throws ServletException {
-         springContext = new SpringContext();
+    public void init(ServletConfig servletConfig) throws ServletException {
+        //获取web.xml的contextConfigLocation,也就是<param-name>contextConfigLocation</param-name>
+        String contextConfigLocation = servletConfig.getInitParameter("contextConfigLocation");
+        springContext = new SpringContext(contextConfigLocation);
         try {
             //初始化
             springContext.init();

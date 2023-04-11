@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SpringContext {
+    //保存类的全路径
     private List<String> classFullPath = new ArrayList<>();
     //定义属性ioc，存放反射生成的bean对象
     public ConcurrentHashMap<String,Object> ioc = new ConcurrentHashMap<>();
@@ -42,8 +43,10 @@ public class SpringContext {
             }else{
                 //扫描到的文件，class可能是其他文件，要进行判断
                String classFullPath =  pack+"."+ f.getName().replaceAll(".class","");
+                this.classFullPath.add(classFullPath);
             }
         }
+
         executeInstance();
     }
     //编写方法，将符合条件的加入到容器中

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,14 +43,21 @@ public class DispatchServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
         System.out.println("自定义的DispatchServlet---doGet调用");
+        doPost(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
         System.out.println("自定义的DispatchServlet---doPost调用");
+        //调用请求分发
+        try {
+            executeDispatch(req, resp);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
     //编写方法，完成url和终止其方法的映射
     private void initHandleMapping(){
@@ -63,13 +71,40 @@ public class DispatchServlet extends HttpServlet {
                 for(Method m:methods){
                     if(m.isAnnotationPresent(RequsetMapping.class)){
                         RequsetMapping requsetMapping = m.getAnnotation(RequsetMapping.class);
-                        String url = requsetMapping.value();
+                        //getServletContext().getContextPath(),可以拿到工程路径，动态获取
+                        String url = getServletContext().getContextPath() + requsetMapping.value();
                         Handler handler = new Handler(url, entry.getValue(), m);
                         handlerList.add(handler);
                     }
                 }
             }
+        }
+    }
 
+    //根据request对象，返回handle对象
+    public Handler getHandler(HttpServletRequest request){
+        String requestURI = request.getRequestURI();
+        //先获取用户请求的uri，/springmvc/monster/list
+        //遍历handleList，找到与用户请求相同的
+        for(Handler handler:handlerList){
+            if(requestURI.equals(handler.getUrl())){
+                return handler;
+            }
+        }
+        return null;
+    }
+
+    //编写方法，完成分发请求
+    private  void executeDispatch(HttpServletRequest request,HttpServletResponse response) throws IOException, InvocationTargetException, IllegalAccessException {
+        //传入request对象，然后进行查找
+        Handler handler = getHandler(request);
+        if(handler==null){
+            //请求的资源没找到,404
+            response.getWriter().print("<h1>404</h1>");
+        }else{
+            Method method = handler.getMethod();
+            //调用方法
+            method.invoke(handler.getHandler(),request,response);
         }
     }
 }

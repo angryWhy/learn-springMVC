@@ -18,9 +18,33 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>springDispatcherServlet</servlet-name>
-<!--        用户的url-pattern表示用户的请求都经过DispatcherServlet的处理-->
+        <!--        用户的url-pattern表示用户的请求都经过DispatcherServlet的处理-->
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+
+
+
+<!--    &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+<!--    自己创建的servlet-->
+<!--    <servlet>-->
+<!--        <servlet-name>myDispatchServlet</servlet-name>-->
+<!--        <servlet-class>com.MyspringMVC.servlet.DispatchServlet</servlet-class>-->
+<!--&lt;!&ndash;        配置操作的指定配置spring容器文件&ndash;&gt;-->
+<!--        <init-param>-->
+<!--            <param-name>contextConfigLocation</param-name>-->
+<!--            <param-value>classpath:springMvc.xml</param-value>-->
+<!--        </init-param>-->
+<!--&lt;!&ndash;        tomcat启动时候，自动加载&ndash;&gt;-->
+<!--        <load-on-startup>1</load-on-startup>-->
+<!--    </servlet>-->
+<!--    &lt;!&ndash;    自己创建的servletMap&ndash;&gt;-->
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>myDispatchServlet</servlet-name>-->
+<!--&lt;!&ndash;        作为前端控制器，拦截所有请求&ndash;&gt;-->
+<!--        <url-pattern>/</url-pattern>-->
+<!--    </servlet-mapping>-->
+
+
 <!--    配置post方式提交put和delete-->
     <filter>
         <filter-name>hiddenHttpMethodFilter</filter-name>
@@ -28,6 +52,6 @@
     </filter>
     <filter-mapping>
         <filter-name>hiddenHttpMethodFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/</url-pattern>
     </filter-mapping>
 </web-app>

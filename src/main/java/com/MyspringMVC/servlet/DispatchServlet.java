@@ -135,6 +135,14 @@ public class DispatchServlet extends HttpServlet {
                     params[indexParams] = value;
                 }else{
                     //如果没有requestParams这个注解，按照默认的进行匹配
+                    //得到目标方法所有形参名字，遍历，如果匹配，就把当前请求的参数值，填充到实参数组中
+                    List<String> paramsName = getParams(handler.getMethod());
+                    for (int i = 0; i < paramsName.size(); i++) {
+                        if(name.equals(paramsName.get(i))){
+                            params[i] = value;
+                            break;
+                        }
+                    }
                 }
             }
             //填充实参
@@ -158,5 +166,16 @@ public class DispatchServlet extends HttpServlet {
             }
         }
         return -1;
+    }
+
+    //得到目标方法所有形参名称，并放入到集合中来
+    public List<String> getParams(Method method){
+        List<String> list = new ArrayList<>();
+        //在默认情况下，
+        Parameter[] parameters = method.getParameters();
+        for(Parameter parameter:parameters){
+            list.add(parameter.getName());
+        }
+        return list;
     }
 }

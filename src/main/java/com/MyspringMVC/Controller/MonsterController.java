@@ -3,6 +3,7 @@ package com.MyspringMVC.Controller;
 import com.MyspringMVC.Service.MonsterService;
 import com.MyspringMVC.annotation.AutoWired;
 import com.MyspringMVC.annotation.Controller;
+import com.MyspringMVC.annotation.RequestParams;
 import com.MyspringMVC.annotation.RequsetMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,5 +21,14 @@ public class MonsterController {
         //获取writer，返回信息
         PrintWriter writer = response.getWriter();
         writer.write("<h1>信息列表</h1>");
+    }
+    @RequsetMapping(value = "/monster/login")
+    public String login(@RequestParams(value = "mName") String name){
+        boolean login = monsterService.login(name);
+        if(login){
+            return"forward:/success.jsp";
+        }else{
+            return"forward:/index.jsp";
+        }
     }
 }

@@ -24,4 +24,11 @@ public class MonsterService implements MonsterInterface{
         monsters.add(new Monster());
         return monsters;
     }
+    public boolean login(String name){
+        if("白骨精".equals(name)){
+            return true;
+        }else {
+            return false;
+        }
+    }
 }

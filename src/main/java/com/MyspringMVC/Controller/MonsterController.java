@@ -1,5 +1,7 @@
 package com.MyspringMVC.Controller;
 
+import com.MyspringMVC.Service.MonsterService;
+import com.MyspringMVC.annotation.AutoWired;
 import com.MyspringMVC.annotation.Controller;
 import com.MyspringMVC.annotation.RequsetMapping;
 
@@ -9,6 +11,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 @Controller()
 public class MonsterController {
+    @AutoWired
+    private MonsterService monsterService;
     //列出所有妖怪的方法
     @RequsetMapping(value = "/monster")
     public void listMonster(HttpServletRequest request, HttpServletResponse response) throws IOException {

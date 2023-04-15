@@ -1,6 +1,7 @@
 package com.MyspringMVC.servlet;
 
 import com.MyspringMVC.annotation.Controller;
+import com.MyspringMVC.annotation.RequestParams;
 import com.MyspringMVC.annotation.RequsetMapping;
 import com.MyspringMVC.contetx.SpringContext;
 import com.MyspringMVC.handler.Handler;
@@ -15,6 +16,7 @@ import java.io.IOException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -106,8 +108,55 @@ public class DispatchServlet extends HttpServlet {
             response.getWriter().print("<h1>404</h1>");
         }else{
             Method method = handler.getMethod();
+            //目标：将HttpServletRequest request,HttpServletResponse response，封装到参数数组
+            //拿到目标方法参数信息，是个数组
+            Class<?>[] parameterTypes = handler.getMethod().getParameterTypes();
+
+            //创建实参参数数组，后面调用反射目标方法时候，会使用
+            Object[] params = new Object[parameterTypes.length];
+
+            for(int i = 0;i<parameterTypes.length;i++){
+                Class<?> parameterType = parameterTypes[i];
+                if("HttpServletRequest".equals(parameterType.getSimpleName())){
+                    params[i] = request;
+                }
+                if("HttpServletResponse".equals(parameterType.getSimpleName())){
+                    params[i] = response;
+                }
+            }
+            //将请求参数和按照顺序填充到实参数组
+            Map<String, String[]> parameterMap = request.getParameterMap();
+            //参数一：请求参数名，参数二：参数值（例如多选）
+            for(Map.Entry<String,String[]> entry:parameterMap.entrySet()){
+                String name = entry.getKey();
+                String value = entry.getValue()[0];
+                int indexParams = getIndexParams(method,name);
+                if(indexParams!=-1){
+                    params[indexParams] = value;
+                }else{
+                    //如果没有requestParams这个注解，按照默认的进行匹配
+                }
+            }
+            //填充实参
             //调用方法
-            method.invoke(handler.getHandler(),request,response);
+            method.invoke(handler.getHandler(),params);
         }
+    }
+
+    //返回请求参数是目标方法的第几个形参
+    public int getIndexParams(Method method,String name){
+        Parameter[] parameters = method.getParameters();
+        for(int i = 0;i<parameters.length;i++){
+            Parameter parameter = parameters[i];
+            if(parameter.isAnnotationPresent(RequestParams.class)){
+                RequestParams annotation = parameter.getAnnotation(RequestParams.class);
+                String value = annotation.value();
+                if(name.equals(value)){
+                    //找到请求参数，对应目标方法的形参位置
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 }

@@ -1,13 +1,17 @@
 package com.MyspringMVC.contetx;
 
+import com.MyspringMVC.annotation.AutoWired;
 import com.MyspringMVC.annotation.Controller;
+import com.MyspringMVC.annotation.Service;
 import com.MyspringMVC.xml.XmlParser;
 import org.dom4j.DocumentException;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SpringContext {
@@ -61,8 +65,10 @@ public class SpringContext {
                 this.classFullPath.add(classFullPath);
             }
         }
-
+        //将带有注解的注入到ioc容器中
         executeInstance();
+        //属性装配
+        executeAutoWired();
     }
     //编写方法，将符合条件的加入到容器中
     public void executeInstance() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
@@ -76,6 +82,47 @@ public class SpringContext {
                 Object bean = aClass.newInstance();
                String beanName =  aClass.getSimpleName().substring(0,1).toLowerCase() + aClass.getSimpleName().substring(1);
                ioc.put(beanName,bean);
+            } else if (aClass.isAnnotationPresent(Service.class)) {
+                Service annotation = aClass.getAnnotation(Service.class);
+                String value = annotation.value();
+                if("".equals(value)){
+                    //通过接口名/类名 来注入ioc容器
+                    Class<?>[] interfaces = aClass.getInterfaces();
+                    //遍历接口，通过接口名字来注入
+                    for(Class<?> in: interfaces){
+                        String beanName = in.getSimpleName().substring(0,1).toLowerCase()+ in.getSimpleName().substring(1);
+                        ioc.put(beanName,aClass.newInstance());
+                    }
+                }else {
+                    ioc.put(value,aClass.newInstance());
+                }
+            }
+        }
+    }
+    public void executeAutoWired() throws IllegalAccessException {
+        if(ioc.isEmpty()){
+            return;
+        }
+        for(Map.Entry<String,Object> entry:ioc.entrySet()){
+            String key = entry.getKey();
+            Object bean = entry.getValue();
+            Field[] fields = bean.getClass().getFields();
+            for(Field field:fields){
+                if(field.isAnnotationPresent(AutoWired.class)){
+                    String value = field.getAnnotation(AutoWired.class).value();
+                    if("".equals(value)){
+                        Class<?> type = field.getType();
+                       String beanName =  type.getSimpleName().substring(0,1).toLowerCase()+type.getSimpleName().substring(1);
+
+                    }else{
+                       if(null == ioc.get(value)){
+                           throw new RuntimeException("ioc容器中不存在要装配的bean");
+                       }
+                       //属性私有，暴力破解
+                        field.setAccessible(true);
+                       field.set(bean,ioc.get(value));
+                    }
+                }
             }
         }
     }

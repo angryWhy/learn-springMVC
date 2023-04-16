@@ -3,8 +3,10 @@ package com.MyspringMVC.servlet;
 import com.MyspringMVC.annotation.Controller;
 import com.MyspringMVC.annotation.RequestParams;
 import com.MyspringMVC.annotation.RequsetMapping;
+import com.MyspringMVC.annotation.ResponseBody;
 import com.MyspringMVC.contetx.SpringContext;
 import com.MyspringMVC.handler.Handler;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.dom4j.DocumentException;
 
 import javax.servlet.ServletConfig;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -100,7 +103,7 @@ public class DispatchServlet extends HttpServlet {
     }
 
     //编写方法，完成分发请求
-    private  void executeDispatch(HttpServletRequest request,HttpServletResponse response) throws IOException, InvocationTargetException, IllegalAccessException {
+    private  void executeDispatch(HttpServletRequest request,HttpServletResponse response) throws IOException, InvocationTargetException, IllegalAccessException, ServletException {
         //传入request对象，然后进行查找
         Handler handler = getHandler(request);
         if(handler==null){
@@ -125,6 +128,7 @@ public class DispatchServlet extends HttpServlet {
                 }
             }
             //将请求参数和按照顺序填充到实参数组
+            request.setCharacterEncoding("utf-8");
             Map<String, String[]> parameterMap = request.getParameterMap();
             //参数一：请求参数名，参数二：参数值（例如多选）
             for(Map.Entry<String,String[]> entry:parameterMap.entrySet()){
@@ -146,8 +150,39 @@ public class DispatchServlet extends HttpServlet {
                 }
             }
             //填充实参
-            //调用方法
-            method.invoke(handler.getHandler(),params);
+            //调用方法,返回解析结果
+            Object result = method.invoke(handler.getHandler(), params);
+            if(result instanceof String){
+               String viewName = (String)result;
+               if(viewName.contains(":")){
+                   //要跳转的页面
+                  String name =  viewName.split(":")[1];
+                  //跳转类型，forward还是redirect
+                  String type = viewName.split(":")[0];
+                  if(type.equals("forward")){
+
+                      request.getRequestDispatcher(name).forward(request,response);
+                  } else if ("redirect".equals(type)) {
+
+                      response.sendRedirect(name);
+                  }
+               }else {
+                   request.getRequestDispatcher(viewName).forward(request,response);
+               }
+               //如果结果是Arraylist，目标方法是否有注解
+            } else if (request instanceof ArrayList) {
+                Method method1 = handler.getMethod();
+                if(method1.isAnnotationPresent(ResponseBody.class)){
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String resultJson = objectMapper.writeValueAsString(result);
+                    response.setContentType("text/html;charset=utf-8");
+                    PrintWriter writer = response.getWriter();
+                    writer.write(resultJson);
+                    writer.flush();
+                    writer.close();
+
+                }
+            }
         }
     }
 

@@ -31,7 +31,11 @@
 <!--            标签表示引入的jar的生命作用范围，在打包时不需要带上当前包-->
             <scope>provided</scope>
         </dependency>
-
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.12.4</version>
+        </dependency>
     </dependencies>
 
 <build>

@@ -1,15 +1,16 @@
 package com.MyspringMVC.Controller;
 
 import com.MyspringMVC.Service.MonsterService;
-import com.MyspringMVC.annotation.AutoWired;
-import com.MyspringMVC.annotation.Controller;
-import com.MyspringMVC.annotation.RequestParams;
-import com.MyspringMVC.annotation.RequsetMapping;
+import com.MyspringMVC.annotation.*;
+import com.formatData.Monster;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller()
 public class MonsterController {
     @AutoWired
@@ -30,5 +31,11 @@ public class MonsterController {
         }else{
             return"forward:/index.jsp";
         }
+    }
+    @RequsetMapping("/monster/list")
+    @ResponseBody()
+    public List<Monster> listMonsterByJson(HttpServletRequest request,HttpServletResponse response){
+        List<Monster> monsters = monsterService.listMonsters();
+        return monsters;
     }
 }

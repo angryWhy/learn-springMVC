@@ -180,7 +180,6 @@ public class DispatchServlet extends HttpServlet {
                     writer.write(resultJson);
                     writer.flush();
                     writer.close();
-
                 }
             }
         }

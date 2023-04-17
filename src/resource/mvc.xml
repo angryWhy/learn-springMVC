@@ -4,7 +4,7 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
-    <context:component-scan base-package="com.web,com.dataValid"/>
+    <context:component-scan base-package="com.web,com.dataValid,com.Json"/>
 <!--    将springMVC不能处理的交个tomcat，比如css，js请求-->
     <mvc:default-servlet-handler/>
 <!--    支持MVC的高级功能，比如JSR303校验，映射动态-->
@@ -25,4 +25,5 @@
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
         <property name="basename" value="i18n"/>
     </bean>
+
 </beans>

@@ -13,9 +13,11 @@
 </head>
 <body>
 <form:form action="save" method="post" modelAttribute="monster">
-    编号:<form:input path="id"/> <br/>
-    年龄:<form:input path="age"/> <br/>
-    名字:<form:input path="name"/><br/>
+    编号:<form:input path="id"/> <form:errors path="id"/> <br/>
+    年龄:<form:input path="age"/> <form:errors path="age"/> <br/>
+    名字:<form:input path="name"/><form:errors path="name"/> <br/>
+    生日:<form:input path="birthday"/><form:errors path="birthday"/> <br/>
+    薪水:<form:input path="salary"/><form:errors path="salary"/> <br/>
     <input type="submit" value="添加妖怪"/>
 </form:form>
 </body>

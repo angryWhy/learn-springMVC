@@ -4,7 +4,7 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
-    <context:component-scan base-package="com.web,com.dataValid,com.Json"/>
+    <context:component-scan base-package="com.web,com.dataValid,com.Json,com.interceptor"/>
 <!--    将springMVC不能处理的交个tomcat，比如css，js请求-->
     <mvc:default-servlet-handler/>
 <!--    支持MVC的高级功能，比如JSR303校验，映射动态-->
@@ -25,5 +25,12 @@
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
         <property name="basename" value="i18n"/>
     </bean>
-
+<!--配置文件上传需要的bean,设置自定义id会报错-->
+    <bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" >
+    </bean>
+<!--    配置interceptor拦截器-->
+    <mvc:interceptors>
+<!--        这种方式会拦截所有的目标方法-->
+        <ref bean="myInterceptor"/>
+    </mvc:interceptors>
 </beans>

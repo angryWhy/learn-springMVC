@@ -2,15 +2,16 @@ package com.Json;
 
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -52,8 +53,7 @@ public class JsonHandler {
 
     @RequestMapping(value = "/downFile")
 
-    //将前台传过来的数据，以JSON形式返回
-    //@RequestBody User user,在形参上加上这个注解，SpringMVC将提交的数据字符串，填充给指定的javabean
+    //将前台传过来的数据，以JSON形式返回，文件下载
     public ResponseEntity<byte[]> save4(HttpSession session){
         //得到下载文件的InputStream
         InputStream resourceAsStream = session.getServletContext().getResourceAsStream("/images/Pic.png");
@@ -75,6 +75,18 @@ public class JsonHandler {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
+    }
+    //文件上传
+    @RequestMapping("/uploadFile")
+    public String fileUpload(@RequestParam(value = "file") MultipartFile multipartFile, HttpServletRequest httpServletRequest) throws IOException {
+        //接受到文件名字
+        String originalFilename = multipartFile.getOriginalFilename();
+        System.out.println("文件名字"+originalFilename);
+        String fullPath = httpServletRequest.getServletContext().getRealPath("/img" + originalFilename);
+        //上传文件
+        File file = new File(fullPath);
+        //将上传的文件，转存到file
+        multipartFile.transferTo(file);
+        return "success";
     }
 }

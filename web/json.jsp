@@ -68,5 +68,11 @@ a:<input id="password" type="text"><br/>
 
 <h1>下载文件的测试 </h1>
 <a href="<%=request.getContextPath()%>/downFile">点击下载文件</a>
+
+<h1>上传文件的测试 </h1>
+<%--multipart/form-data表示表单数据多个组成，二进制文件--%>
+<form action="?" enctype="multipart/form-data">
+    文件上传<input type="submit" value="上传文件"/>
+</form>
 </body>
 </html>

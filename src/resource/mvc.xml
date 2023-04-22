@@ -32,5 +32,41 @@
     <mvc:interceptors>
 <!--        这种方式会拦截所有的目标方法-->
         <ref bean="myInterceptor"/>
+
+<!--        配置针对特定path的拦截器-->
+        <mvc:interceptor>
+            <mvc:mapping path="/save"/>
+            <ref bean="myInterceptor"/>
+        </mvc:interceptor>
+
+<!--        第一个拦截器-->
+        <mvc:interceptor>
+<!--            //通配符拦截-->
+            <mvc:mapping path="/h*"/>
+<!--            对特定方法取消拦截-->
+            <mvc:exclude-mapping path="/hello"/>
+            <ref bean="myInterceptor"/>
+        </mvc:interceptor>
+
+<!--        第二个拦截器-->
+        <mvc:interceptor>
+            <!--            //通配符拦截-->
+            <mvc:mapping path="/h*"/>
+            <!--            对特定方法取消拦截-->
+            <mvc:exclude-mapping path="/hello"/>
+            <ref bean="myIinterceptor2"/>
+        </mvc:interceptor>
     </mvc:interceptors>
+<!--    配置统一的异常处理-->
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+<!--                针对特定的异常-->
+<!--                跳转的页面，jsp-->
+                <prop key="java.lang.NullPointerException">nullpoint</prop>
+<!--                所有的异常-->
+                <prop key="java.lang.Exception">exception</prop>
+            </props>
+        </property>
+    </bean>
 </beans>

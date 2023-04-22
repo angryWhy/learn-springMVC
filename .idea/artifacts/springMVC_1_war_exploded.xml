@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="springNVC-1:war exploded">
-    <output-path>$PROJECT_DIR$/out/artifacts/springNVC_1_war_exploded</output-path>
+  <artifact type="exploded-war" name="springMVC-1:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/springMVC_1_war_exploded</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
